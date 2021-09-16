@@ -122,7 +122,9 @@ macro_rules! test_in_docker {
 
 #[test]
 fn test() {
-    test_in_docker!("ubuntu:latest", &["--env", "HELLO=WORLD"]);
+    test_in_docker!("ubuntu:latest");
+
+    assert!("www.google.com:443".to_socket_addrs().is_ok());
 
     assert!(std::process::Command::new("sh")
         .args(&["-c", ": > /etc/resolv.conf"])
@@ -131,14 +133,6 @@ fn test() {
         .success());
 
     assert!("www.google.com:443".to_socket_addrs().is_err());
-
-    assert!(std::process::Command::new("sh")
-        .args(&["-c", "echo 8.8.8.8 > /etc/resolv.conf"])
-        .status()
-        .unwrap()
-        .success());
-
-    assert!("www.google.com:443".to_socket_addrs().is_ok());
 }
 
 #[cfg(test)]
