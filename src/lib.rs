@@ -59,8 +59,6 @@ impl Test {
             .output()
             .unwrap();
 
-        println!("'{}'", String::from_utf8_lossy(&output.stdout));
-
         let stdout = String::from_utf8_lossy(&output.stdout)
             .lines()
             .map(|line| serde_json::from_str(line).unwrap())
@@ -126,11 +124,10 @@ fn test() {
 
     assert!("www.google.com:443".to_socket_addrs().is_ok());
 
-    assert!(std::process::Command::new("sh")
+    std::process::Command::new("sh")
         .args(&["-c", ": > /etc/resolv.conf"])
         .status()
-        .unwrap()
-        .success());
+        .unwrap();
 
     assert!("www.google.com:443".to_socket_addrs().is_err());
 }
